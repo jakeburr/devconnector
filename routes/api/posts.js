@@ -10,3 +10,4 @@ router.get("/test", (req, res) => res.json({ msg: "Posts Works" }));
 // 200 status means everything is okay
 
 module.exports = router;
+
