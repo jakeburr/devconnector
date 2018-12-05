@@ -16,26 +16,26 @@ module.exports = function validateRegisterInput(data) {
   }
   if (Validator.isEmpty(data.name)) {
     // Can only take in a string.
-    errors.name = "Name field is required";
+    errors.name = "A name is required to sign up";
   }
   if (Validator.isEmpty(data.email)) {
     // Can only take in a string.
-    errors.email = "Email field is required";
+    errors.email = "A email is required to sign up";
   }
   if (!Validator.isEmail(data.email)) {
     // Can only take in a string.
-    errors.email = "Email is invalid";
+    errors.email = "You've entered an invalid email";
   }
   if (Validator.isEmpty(data.password)) {
     // Can only take in a string.
-    errors.password = "Password field is required";
+    errors.password = "A password is required to sign up";
   }
   if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
-    errors.password = "Password must be at least 6 characters";
+    errors.password = "A password can be 6 to 30 characters long";
   }
   if (Validator.isEmpty(data.password2)) {
     // Can only take in a string.
-    errors.password2 = "Confirm password field is required";
+    errors.password2 = "Please confirm your password";
   }
   if (!Validator.equals(data.password, data.password2)) {
     // Compares both passwords to be sure they are the same.
