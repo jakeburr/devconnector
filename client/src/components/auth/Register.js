@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import axios from "axios";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import classnames from "classnames";
+import { connect } from "react-redux"; // Used to connect react component to redux
+import { registerUser } from "../../actions/authActions"; // All actions brought in are used with props
 
 class Register extends Component {
   constructor() {
@@ -13,6 +16,17 @@ class Register extends Component {
       errors: {}
     };
   }
+  componentDidMount = () => {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  };
+
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  };
 
   onChange = e => {
     this.setState({
@@ -31,10 +45,7 @@ class Register extends Component {
     };
     console.log(newUser);
 
-    axios
-      .post("/api/users/register", newUser)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
+    this.props.registerUser(newUser, this.props.history);
   };
 
   render() {
@@ -130,4 +141,20 @@ class Register extends Component {
   }
 }
 
-export default Register;
+// Map prop types with this and importing prop types
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+// Must declare this function with the states you want to use to use as (this.props.auth.name)
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors // auth can be named anything, it's simply a name declared for that component to use...    state.auth comes from rootreducer (index.js) in reducers.
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUser } // Map all actions here
+)(withRouter(Register));
